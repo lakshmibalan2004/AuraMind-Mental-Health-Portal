@@ -99,14 +99,14 @@ This project uses environment variables for sensitive information like API keys.
     ```
     **Note:** Ensure the `.env` file is listed in your `.gitignore` file to prevent committing sensitive keys to GitHub.
 
-    Running the Application
-1. Initialize/Update the Database:
+## Running the Application
+* 1. Initialize/Update the Database:
 If this is the first time or if you've made changes to the database models (User, MoodEntry, JournalEntry), initialize the database:
 # Ensure FLASK_APP=app.py is set in your environment or .env file
 flask init-db
-2.Start the Flask development server:
+* 2.Start the Flask development server:
 python app.py
-3.Open your web browser and navigate to:
+* 3.Open your web browser and navigate to:
 http://127.0.0.1:5000
 
 ## Folder Structure
@@ -152,7 +152,7 @@ http://127.0.0.1:5000
     *   `README.md` - This file
 
 
-# Usage
+## Usage
 * 1.Register: Create a new account or use the "Continue as Guest" option.
 * 2.Login: Access your account.
 * 3.Dashboard: Get an overview of your well-being.
@@ -161,7 +161,7 @@ http://127.0.0.1:5000
 * 6.Resources: Browse curated mental health resources. Filter and search for relevant information.
 * 7.Chat Support: Engage with an AI companion for support.
 
-# Acknowledgements
+## Acknowledgements
 * Flask, SQLAlchemy, and other Python libraries used.
 * Font Awesome for icons.
 * Google Generative AI for the AI chat feature.
