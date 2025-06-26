@@ -102,7 +102,7 @@ This project uses environment variables for sensitive information like API keys.
 ## Running the Application
 * 1. Initialize/Update the Database:
 If this is the first time or if you've made changes to the database models (User, MoodEntry, JournalEntry), initialize the database:
-# Ensure FLASK_APP=app.py is set in your environment or .env file
+* Note: Ensure FLASK_APP=app.py is set in your environment or .env file
 flask init-db
 * 2.Start the Flask development server:
 python app.py
