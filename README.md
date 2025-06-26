@@ -148,15 +148,15 @@ AuraMind/
 └── README.md         
 
 # Usage
-1.Register: Create a new account or use the "Continue as Guest" option.
-2.Login: Access your account.
-3.Dashboard: Get an overview of your well-being.
-4.Mood Tracker: Log your daily moods and notes.
-5.Journal: Write and review your journal entries. Sentiment is analyzed automatically.
-6.Resources: Browse curated mental health resources. Filter and search for relevant information.
-7.Chat Support: Engage with an AI companion for support.
+* 1.Register: Create a new account or use the "Continue as Guest" option.
+* 2.Login: Access your account.
+* 3.Dashboard: Get an overview of your well-being.
+* 4.Mood Tracker: Log your daily moods and notes.
+* 5.Journal: Write and review your journal entries. Sentiment is analyzed automatically.
+* 6.Resources: Browse curated mental health resources. Filter and search for relevant information.
+* 7.Chat Support: Engage with an AI companion for support.
 
 # Acknowledgements
-Flask, SQLAlchemy, and other Python libraries used.
-Font Awesome for icons.
-Google Generative AI for the AI chat feature.
+* Flask, SQLAlchemy, and other Python libraries used.
+* Font Awesome for icons.
+* Google Generative AI for the AI chat feature.
