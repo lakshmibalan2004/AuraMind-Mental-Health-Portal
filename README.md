@@ -109,43 +109,48 @@ python app.py
 3.Open your web browser and navigate to:
 http://127.0.0.1:5000
 
-Folder Structure (Simplified)
-Generated code
-AuraMind/
-├── app.py                 # Main Flask application
-├── static/
-│   ├── css/
-│   │   ├── style.css
-│   │   ├── dashboard.css
-│   │   ├── mood_tracker.css
-│   │   ├── resources.css
-│   │   └── chat_support.css
-│   │   └── journal.css
-│   ├── js/
-│   │   ├── script.js          (for login/register)
-│   │   ├── dashboard_script.js
-│   │   ├── mood_tracker_script.js
-│   │   ├── resources_script.js
-│   │   └── chat_support_script.js
-│   │   └── journal_script.js
-│   │   ├── register_script.js
-│   └── images/
-│       ├── logo.png
-│       └── ... (other images)
-├── templates/
-│   ├── login.html
-│   ├── register.html
-│   ├── request_reset.html
-│   ├── reset_password.html
-│   ├── dashboard_main.html
-│   ├── mood_tracker.html
-│   ├── journal_screen.html
-│   ├── resources.html
-│   ├── chat_support.html
-├── auramind.db            # SQLite database file (created after init-db)
-├── requirements.txt       # Python dependencies
-├── .env                   # Environment variables (GITIGNORED!)
-└── README.md         
+## Folder Structure
+
+*   **AuraMind/** (Root Project Folder)
+    *   `app.py` - Main Flask application
+    *   **static/**
+        *   **css/**
+            *   `style.css`
+            *   `dashboard.css`
+            *   `mood_tracker.css`
+            *   `mood_history.css`
+            *   `journal_screen.css`
+            *   `resources.css`
+            *   `chat_support.css`
+        *   **js/**
+            *   `script.js` (for login/register)
+            *   `dashboard_script.js`
+            *   `mood_tracker_script.js`
+            *   `mood_history_script.js`
+            *   `journal_script.js`
+            *   `resources_script.js`
+            *   `chat_support_script.js`
+        *   **images/**
+            *   `logo.png`
+            *   `default-profile.jpg`
+            *   *(List other key images)*
+    *   **templates/**
+        *   `login.html`
+        *   `register.html`
+        *   `request_reset.html`
+        *   `reset_password.html`
+        *   `dashboard_main.html`
+        *   `mood_tracker.html`
+        *   `mood_history.html`
+        *   `journal_screen.html`
+        *   `resources.html`
+        *   `chat_support.html`
+    *   `.env` - Environment variables (GITIGNORED!)
+    *   `.gitignore`
+    *   `auramind.db` - SQLite database file (GITIGNORED!)
+    *   `requirements.txt` - Python dependencies
+    *   `README.md` - This file
+
 
 # Usage
 * 1.Register: Create a new account or use the "Continue as Guest" option.
