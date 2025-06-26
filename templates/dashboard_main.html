@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMind - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AuraMind Logo" class="sidebar-logo">
+                <span class="app-name">AuraMind</span>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <!-- Assuming 'active_page' variable is passed from Flask to highlight current page -->
+                    <li class="{{ 'active' if active_page == 'dashboard' else '' }}"><a href="{{ url_for('dashboard_page') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li class="{{ 'active' if active_page == 'mood_tracker' else '' }}"><a href="{{ url_for('mood_tracker_page') }}"><i class="fas fa-smile-beam"></i> Mood Tracker</a></li>
+                    <li class="{{ 'active' if active_page == 'journal' else '' }}"><a href="{{ url_for('journal_page') }}"><i class="fas fa-pencil-alt"></i> Journal</a></li>
+                                        
+                    {% if not is_guest %}
+                    <li class="{{ 'active' if active_page == 'chat_support' else '' }}"><a href="{{ url_for('chat_support_page') }}"><i class="fas fa-comments"></i> Chat Support</a></li>
+                    {% endif %}
+
+                    <li class="{{ 'active' if active_page == 'resources' else '' }}"><a href="{{ url_for('resources_page') }}"><i class="fas fa-book-open"></i> Resources</a></li>
+                    
+                    {% if not is_guest %}
+                        <!-- Community Link Placeholder - Uncomment and add active class logic when ready -->
+                        <!-- <li class="{{ 'active' if active_page == 'community' else '' }}"><a href="#"><i class="fas fa-users"></i> Community</a></li> -->
+                    {% else %}
+                        <li class="nav-item-guest-notice">
+                            <small>Register to access all features.</small>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <a href="{{ url_for('logout_action') }}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                </div>
+                <div class="top-bar-right">
+                    <div class="profile-container"> 
+                        <a href="#" class="profile-icon" id="profileIconLinkDashboard" title="Profile">
+                            <img src="{{ url_for('static', filename='images/default-profile.jpg') }}" alt="Profile">
+                        </a>
+                        <div class="profile-dropdown" id="profileDropdownMenuDashboard" style="display: none;">
+                            {% if is_guest %}
+                                <div class="profile-info-item">Guest User</div>
+                            {% else %}
+                                <div class="profile-info-item profile-name">{{ user_name }}</div>
+                                {% if user_email %}
+                                    <div class="profile-info-item profile-email">{{ user_email }}</div>
+                                {% endif %}
+                            {% endif %}
+                            <hr class="profile-dropdown-divider">
+                            <a href="{{ url_for('logout_action') }}" class="profile-dropdown-item">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Specific Content -->
+            <section class="page-section">
+                <div class="welcome-header">
+                    <div>
+                        <h1>Welcome {% if is_guest %}Guest{% else %}Back, {{ user_name | default('User') }}{% endif %}!</h1>
+                        <p>Your calming space for mental well-being.</p>
+                    </div>
+                </div>
+
+                {% if is_guest %}
+                <div class="guest-prompt">
+                    <p>You are currently browsing as a guest. <a href="{{ url_for('register_page_route') }}">Create an account</a> to save your progress and access all features!</p>
+                </div>
+                {% endif %}
+
+                <div class="dashboard-grid">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h2>Your Mood Over Time</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="moodChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card quick-actions-card">
+                        <div class="card-header">
+                            <h2>Quick Actions</h2>
+                        </div>
+                        <div class="card-body">
+                            <button id="logMoodQuickActionBtn" class="btn btn-action"><i class="far fa-smile"></i> Log Mood</button> 
+                            {% if not is_guest %}
+                            <button id="chatWithSupportBtn" class="btn btn-action"><i class="fas fa-headset"></i> Chat with Support</button>
+                            {% endif %}
+                            <button id="exploreResourcesBtn" class="btn btn-action"><i class="fas fa-book-reader"></i> Explore Resources</button>
+                        </div>
+                    </div>
+        
+                    <div class="card resource-spotlight-card">
+                         <div class="card-header">
+                            <h2>Resource Spotlight</h2>
+                        </div>
+                        <div class="card-body">
+                            {% if spotlight_resource %}
+                                <img src="{{  url_for('static', filename='images/default-spotlight.jpg') }}" alt="AuraMind Resources">
+                                <h4>{{ spotlight_resource.title }}</h4>
+                                <p>{{ spotlight_resource.description | truncate(100, True, '...') }}</p> {# Increased truncate length #}
+                                <a href="{{ spotlight_resource.url }}" target="_blank" rel="noopener noreferrer" class="learn-more-link">
+                                    Learn More <i class="fas fa-arrow-right"></i>
+                                </a>
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='images/default-spotlight.jpg') }}" alt="AuraMind Resources"> {# Example default #}
+                                <h4>Explore Our Resources</h4>
+                                <p>Discover articles and tools to support your well-being.</p>
+                                <a href="{{ url_for('resources_page') }}" class="learn-more-link">
+                                    View All Resources <i class="fas fa-arrow-right"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        var moodChartLabels = {{ mood_labels | tojson | safe if mood_labels else [] | tojson | safe}};
+        var moodChartValues = {{ mood_values | tojson | safe if mood_values else [] | tojson | safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/dashboard_script.js') }}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileIconDashboard = document.getElementById('profileIconLinkDashboard');
+            const profileDropdownDashboard = document.getElementById('profileDropdownMenuDashboard');
+
+            if (profileIconDashboard && profileDropdownDashboard) {
+                profileIconDashboard.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+                    profileDropdownDashboard.style.display = profileDropdownDashboard.style.display === 'none' ? 'block' : 'none';
+                });
+                document.addEventListener('click', function(event) {
+                    if (profileDropdownDashboard && 
+                        !profileIconDashboard.contains(event.target) && 
+                        !profileDropdownDashboard.contains(event.target)) {
+                        profileDropdownDashboard.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Changed from UTF-SYSTEM -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMind - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Message area for JavaScript feedback (optional for login, but good for consistency) -->
+    <div id="loginMessage" class="message" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 10px; border-radius: 4px; z-index:1000;"></div>
+
+    <div class="login-container">
+        <div class="form-panel">
+            <div class="form-content">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AuraMind Logo" class="logo">
+                <h1>Welcome to AuraMind</h1>
+                <p class="subtitle">Your Safe Space to Feel, Reflect, and Heal.</p>
+
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log In</button>
+                </form>
+                <div class="links">
+                    <a href="{{ url_for('request_password_reset_page') }}">Forgot password?</a>
+                    <!-- CORRECTED LINK -->
+                    <a href="{{ url_for('register_page_route') }}">Don't have an account? Sign Up</a>
+                </div>
+
+                <div class="alternative-login">
+                    <!-- In templates/login.html, inside <div class="alternative-login"> -->
+                    <button type="button" id="continueAsGuestBtn" class="btn btn-secondary">Continue as Guest</button>
+                    <!-- CORRECTED "BUTTON" (now a link styled as a button) -->
+                    <a href="{{ url_for('register_page_route') }}" class="btn btn-tertiary" style="display: block; text-align: center; text-decoration: none; line-height: normal;">Sign Up with Email</a>
+                </div>
+            </div>
+        </div>
+        <div class="image-panel">
+            <div class="quote-overlay">
+                <p>"Your mind matters. One step at a time, towards clarity and calm."</p>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script> <!-- Script for login page -->
+</body>
+</html>

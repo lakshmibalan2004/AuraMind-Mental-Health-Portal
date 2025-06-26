@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMind - Emotional Support Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat_support.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js">
+
+</script> 
+</head>
+<body class="chat-page-body"> <!-- Added class for specific body styling if needed -->
+    <div class="chat-page-container">
+        <!-- Main Application Header -->
+        <header class="app-main-header">
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AuraMind Logo" class="header-logo">
+                <span class="header-title">AuraMind</span>
+                <nav class="header-nav">
+                    <a href="{{ url_for('chat_support_page') }}" class="nav-link active">Support AI</a>
+                    <a href="{{ url_for('dashboard_page') }}" class="nav-link">Dashboard</a>
+                    <!-- Add other main navigation links here if needed -->
+                </nav>
+            </div>
+            <div class="header-right">
+                <!-- Updated Profile Icon with Dropdown -->
+                <div class="profile-dropdown-container">
+                    <a href="#" class="profile-icon-header" id="profileIconHeader" title="Profile">
+                        <img src="{{ url_for('static', filename='images/default-profile.jpg') }}" alt="Profile">
+                    </a>
+                    <div class="profile-dropdown-content" id="profileDropdown">
+                        <div class="dropdown-user-name">{{ user_name | default('User') }}</div>
+                        {% if not is_guest and user_email %}
+                        <div class="dropdown-user-email">{{ user_email }}</div>
+                        <hr>
+                        {% endif %}
+                        <!-- <a href="#">My Profile</a> --> <!-- Link to a future full profile page -->
+                        <a href="{{ url_for('logout_action') }}">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Chat Interface -->
+        <div class="chat-interface-container">
+            <!-- AI Companions Sidebar -->
+            <aside class="ai-companions-sidebar">
+                <h3>AI Companions</h3>
+                <ul>
+                    <li class="companion-item active" data-companion-id="dr_empathy">
+                        <!-- UPDATED Image for Dr. Empathy -->
+                        <img src="{{ url_for('static', filename='images/placeholder-avatar.png') }}" alt="Dr. Empathy" class="companion-avatar" id="drEmpathyAvatarStatic">
+                        <div class="companion-info">
+                            <span class="companion-name" id="drEmpathyNameStatic">Dr. Empathy</span>
+                            <span class="companion-specialty" id="drEmpathySpecialtyStatic">Anxiety & Stress</span>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </li>
+                    <!-- REMOVED Mindful Mike -->
+                    <!-- 
+                    <li class="companion-item" data-companion-id="mindful_mike">
+                         <img src="{{ url_for('static', filename='images/placeholder-avatar.png') }}" alt="Mindful Mike" class="companion-avatar">
+                         <div class="companion-info">
+                            <span class="companion-name">Mindful Mike</span>
+                            <span class="companion-specialty">Mindfulness Guide</span>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </li>
+                    -->
+                    <!-- You can add more companions here later -->
+                </ul>
+            </aside>
+
+            <!-- Chat Area -->
+            <main class="chat-area">
+                <header class="chat-header">
+                    <div class="chat-companion-details">
+                        <!-- These will be updated by JS when a companion is selected -->
+                        <img src="{{ url_for('static', filename='images/placeholder-avatar.png') }}" alt="Dr. Empathy" class="chat-avatar-large" id="chatHeaderAvatar">
+                        <div>
+                            <h2 class="chat-companion-name" id="chatHeaderName">Dr. Empathy</h2>
+                            <p class="chat-companion-specialty" id="chatHeaderSpecialty">Anxiety & Stress</p>
+                        </div>
+                    </div>
+                    <!-- REMOVED View Details Button -->
+                    <!-- <button class="btn btn-outline-chat">View Details</button> -->
+                </header>
+
+                <div class="chat-messages-container" id="chatMessages">
+                    <!-- Static initial messages (can be removed if JS loads history) -->
+                    <div class="chat-message ai-message">
+                        <img src="{{ url_for('static', filename='images/placeholder-avatar.png') }}" alt="AI Avatar" class="message-avatar">
+                        <div class="message-content">
+                            <p>Hello there! I'm Dr. Empathy. How are you feeling today, and what's on your mind?</p>
+                            <div class="message-meta">
+                                <span>10:00 AM</span>
+                                <button class="msg-reaction-btn" title="Like"><i class="far fa-thumbs-up"></i></button>
+                                <button class="msg-reaction-btn" title="Dislike"><i class="far fa-thumbs-down"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Messages will be added here dynamically by JS -->
+                </div>
+
+                <div class="suggested-prompts">
+                    <button class="prompt-btn">What are some stress-relief techniques?</button>
+                    <button class="prompt-btn">How can I set better boundaries at work?</button>
+                    <button class="prompt-btn">Tell me about CBT for anxiety.</button>
+                    <button class="prompt-btn">Suggest a quick breathing exercise.</button>
+                </div>
+
+                <footer class="chat-input-area">
+                    <input type="text" id="chatMessageInput" placeholder="Write a message to Dr. Empathy...">
+                    <button id="sendMessageBtn" class="send-btn" title="Send"><i class="fas fa-paper-plane"></i></button>
+                </footer>
+                <p class="disclaimer-text">AI responses may be inaccurate or incomplete. Consult with a professional for diagnosis or treatment.</p>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Pass Flask URLs or data to JavaScript if needed
+        const userProfileImage = "{{ url_for('static', filename='images/default-profile.jpg') }}";
+        const drEmpathyAvatar = "{{ url_for('static', filename='images/placeholder-avatar.png') }}"; // Using placeholder for Dr. Empathy
+    </script>
+    <script src="{{ url_for('static', filename='js/chat_support_script.js') }}"></script>
+</body>
+</html>

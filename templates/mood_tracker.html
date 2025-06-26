@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMind - Mood Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mood_tracker.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+
+        <header class="mood-tracker-top-bar">
+            <div class="top-bar-left">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AuraMind Logo" class="app-logo-small">
+                <nav class="main-navigation">
+                    <a href="{{ url_for('dashboard_page') }}">Dashboard</a>
+                    <a href="{{ url_for('mood_tracker_page') }}" class="active">Mood Tracker</a>
+                </nav>
+            </div>
+            <div class="top-bar-right">
+        <!-- Profile Icon and Dropdown -->
+                <div class="profile-container"> <!-- Added a wrapper for positioning -->
+                    <a href="#" class="profile-icon" id="profileIconLink" title="Profile">
+                        <img src="{{ url_for('static', filename='images/default-profile.jpg') }}" alt="Profile">
+                    </a>
+                    <div class="profile-dropdown" id="profileDropdownMenu" style="display: none;">
+                        {% if is_guest %}
+                            <div class="profile-info-item">Guest User</div>
+                        {% else %}
+                            <div class="profile-info-item profile-name">{{ user_name }}</div>
+                            {% if user_email %} {# Assuming you pass user_email to this template #}
+                                <div class="profile-info-item profile-email">{{ user_email }}</div>
+                            {% endif %}
+                        {% endif %}
+                        <hr class="profile-dropdown-divider">
+                        <a href="{{ url_for('logout_action') }}" class="profile-dropdown-item">Logout</a>
+            </div>
+        </div>
+    </div>
+
+        </header>
+
+        <main class="mood-tracker-content">
+            <div class="mood-input-section">
+                <h2>How are you feeling right now?</h2>
+                <p class="subtitle">Select an emoji or use the slider to log your mood.</p>
+
+                <div class="emoji-selector">
+                    <span class="emoji-option" data-mood="🥰" title="Loved">🥰</span>
+                    <span class="emoji-option" data-mood="😊" title="Happy">😊</span>
+                    <span class="emoji-option" data-mood="🙂" title="Content">🙂</span>
+                    <span class="emoji-option" data-mood="😐" title="Neutral">😐</span>
+                    <span class="emoji-option" data-mood="😟" title="Sad">😟</span>
+                    <span class="emoji-option" data-mood="😢" title="Crying">😢</span>
+                    <span class="emoji-option" data-mood="😠" title="Angry">😠</span>
+                    <span class="emoji-option" data-mood="😥" title="Anxious">😥</span>
+                    <span class="emoji-option" data-mood="🤯" title="Stressed">🤯</span>
+                    <span class="emoji-option" data-mood="😴" title="Tired">😴</span>
+                </div>
+
+                <div class="slider-toggle-area">
+                    <button id="switchToSliderBtn" class="btn btn-outline">Switch to Slider</button>
+                    <div id="moodSliderContainer" style="display: none; margin-top:15px;">
+                        <label for="moodRange">Mood Level: <span id="sliderValueDisplay">3</span> (1=Very Low, 5=Very High)</label>
+                        <input type="range" id="moodRange" name="moodRange" min="1" max="5" value="3" class="mood-slider">
+                    </div>
+                </div>
+                <input type="hidden" id="selectedMoodValue" name="selectedMoodValue">
+
+                <div class="note-section">
+                    <label for="moodNote">Want to add a note?</label>
+                    <textarea id="moodNote" name="moodNote" rows="4" placeholder="Any thoughts with this mood? (Optional)"></textarea>
+                </div>
+
+                <button id="saveMoodBtn" class="btn btn-primary btn-save-mood">Save Mood</button>
+                <div id="saveMoodMessage" class="message" style="display:none; margin-top: 15px;"></div> 
+                <p class="entry-timestamp-display" id="entryTimestamp">Entry for: May 22, 2025 at 06:22 AM</p>
+            </div>
+
+            <aside class="recent-entries-section">
+                <h3>Recent Entries</h3>
+                <ul class="recent-entries-list">
+                    <!-- **** DYNAMICALLY POPULATED SECTION - CORRECTED **** -->
+                    {% if recent_mood_entries and recent_mood_entries|length > 0 %}
+                        {% for entry_item in recent_mood_entries %} <!-- Assuming app.py sends a list of dicts -->
+                        <li>
+                            <span class="entry-emoji">{{ entry_item.mood_value }}</span> 
+                            <div class="entry-details">
+                                {% if entry_item.note %}
+                                <span class="entry-note-preview">{{ entry_item.note | truncate(60, True, '...') }}</span>
+                                {% else %}
+                                <span class="entry-note-preview"><em>No note added.</em></span>
+                                {% endif %}
+                                <!-- **** USE THE PRE-FORMATTED TIMESTAMP FROM THE DICTIONARY **** -->
+                                <span class="entry-time">{{ entry_item.formatted_timestamp }}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="no-entries-message">
+                            <p>No mood entries yet. Log your first mood above!</p>
+                        </li>
+                    {% endif %}
+                    <!-- **** END OF DYNAMIC SECTION **** -->
+                </ul>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Inline script for emoji selection - can be moved to mood_tracker_script.js -->
+    <script>
+        const moodEmojisInline = document.querySelectorAll('.emoji-option');
+        const selectedMoodValueInputInline = document.getElementById('selectedMoodValue');
+        
+        moodEmojisInline.forEach(emoji => {
+            emoji.addEventListener('click', function() {
+                selectedMoodValueInputInline.value = this.dataset.mood;
+                console.log('Inline script - Selected mood:', this.dataset.mood);
+                // The .selected class and other logic should be handled by mood_tracker_script.js
+            });
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/mood_tracker_script.js') }}"></script>
+</body>
+</html>

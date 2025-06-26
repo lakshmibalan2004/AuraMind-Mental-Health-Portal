@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMind - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .register-container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .form-panel.register-panel {
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px 40px;
+            background-color: #fff;
+        }
+        .form-panel.register-panel .logo { margin-bottom: 20px; }
+        .form-panel.register-panel h1 { font-size: 22px; margin-bottom: 8px; }
+        .form-panel.register-panel .subtitle { margin-bottom: 25px; }
+        .form-panel.register-panel .links { text-align: center; margin-top: 20px; justify-content: center; }
+        /* Basic message styling if not already in style.css */
+        .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align:center; border: 1px solid transparent; }
+        .message.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;}
+        .message.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb;}
+    </style>
+</head>
+<body>
+    <div class="register-container-wrapper">
+        <div class="form-panel register-panel">
+            <div class="form-content">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AuraMind Logo" class="logo">
+                <h1>Create Your AuraMind Account</h1>
+                <p class="subtitle">Join us to Feel, Reflect, and Heal.</p>
+                <div id="registerMessage" class="message" style="display:none;"></div>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder="Create a Password" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                <div class="links">
+                    <a href="{{ url_for('login_page') }}">Already have an account? Log In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/register_script.js') }}"></script>
+</body>
+</html>

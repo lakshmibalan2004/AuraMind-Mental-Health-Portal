@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraMind - Journal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journal.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container journal-page-container">
+
+        <header class="journal-top-bar">
+            <div class="top-bar-left">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="AuraMind Logo" class="app-logo-small">
+                <span class="page-title">Journal</span>
+                <nav class="main-navigation">
+                    <a href="{{ url_for('dashboard_page') }}">Dashboard</a>
+                    <a href="{{ url_for('journal_page') }}" class="{{ 'active' if active_page == 'journal_entries' else '' }}">Entries</a>
+                </nav>
+            </div>
+            <div class="top-bar-right">
+                <!-- REMOVED Settings and Bell icons -->
+                <!-- <button class="icon-button" title="Settings"><i class="fas fa-cog"></i></button> -->
+                <!-- <button class="icon-button" title="Notifications"><i class="fas fa-bell"></i></button> -->
+                
+                <!-- ADDED Profile Dropdown Structure (similar to dashboard) -->
+                <div class="profile-container"> 
+                    <a href="#" class="profile-icon" id="profileIconLinkJournal" title="Profile">
+                        <img src="{{ url_for('static', filename='images/default-profile.jpg') }}" alt="Profile">
+                    </a>
+                    <div class="profile-dropdown" id="profileDropdownMenuJournal" style="display: none;">
+                        {% if is_guest %}
+                            <div class="profile-info-item">Guest User</div>
+                        {% else %}
+                            <div class="profile-info-item profile-name">{{ user_name }}</div>
+                            {% if user_email %}
+                                <div class="profile-info-item profile-email">{{ user_email }}</div>
+                            {% endif %}
+                        {% endif %}
+                        <hr class="profile-dropdown-divider">
+                        <a href="{{ url_for('logout_action') }}" class="profile-dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="journal-main-layout">
+            <aside class="journal-left-sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-section-header">
+                        <h4><i class="fas fa-history"></i> Journal History</h4>
+                        <button class="icon-button-small" title="Refresh" id="refreshCalendarBtn"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button class="cal-nav-btn" id="calPrevMonthBtn"><</button>
+                            <span id="calMonthYear">Month Year</span> <!-- Will be set by JS -->
+                            <button class="cal-nav-btn" id="calNextMonthBtn">></button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid">
+                            <div class="cal-day-header">Su</div><div class="cal-day-header">Mo</div><div class="cal-day-header">Tu</div><div class="cal-day-header">We</div><div class="cal-day-header">Th</div><div class="cal-day-header">Fr</div><div class="cal-day-header">Sa</div>
+                            <!-- Calendar days will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-section recent-journal-entries">
+                    <h4>Recent Entries</h4>
+                    <ul id="recentEntriesList">
+                        {% if recent_journal_entries and recent_journal_entries|length > 0 %}
+                            {% for entry in recent_journal_entries %}
+                                <li>
+                                    <!-- Assuming you'll have a way to view the full entry later, perhaps by entry.id -->
+                                    <a href="#" data-entry-id="{{ entry.id }}" class="load-entry-link"> 
+                                        {{ entry.title or ('Entry on ' + entry.entry_date_formatted) }}
+                                        <span>{{ entry.entry_date_formatted }}</span>
+                                        <!-- Optionally show snippet: <small>{{ entry.content_snippet }}</small> -->
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="no-entries-message"><p>No recent journal entries to display.</p></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="journal-editor-area">
+                <textarea id="journalEntryText" placeholder="Start writing your journal entry here..."></textarea>
+            </section>
+
+            <aside class="journal-right-sidebar">
+                <div class="entry-details-form">
+                    <h4><i class="fas fa-info-circle"></i> Entry Details</h4>
+                    <div class="form-group">
+                        <label for="entryDate">Date</label>
+                        <input type="date" id="entryDate" name="entryDate"> <!-- Value set by JS -->
+                    </div>
+                    <div class="form-group">
+                        <label>Sentiment Analysis</label>
+                        <div class="sentiment-display" id="sentimentDisplayArea"><i class="far fa-meh"></i> Neutral</div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="saveEntryBtn" class="btn btn-secondary-journal"><i class="fas fa-save"></i> Save Entry</button>
+                        
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Pass current month and year from Flask for initial calendar setup -->
+    <script>
+        var initialCalendarMonth = {{ current_month }}; // 1-12
+        var initialCalendarYear = {{ current_year }};
+    </script>
+    <script src="{{ url_for('static', filename='js/journal_script.js') }}"></script>
+</body>
+</html>

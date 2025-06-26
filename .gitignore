@@ -1,0 +1,6 @@
+.env
+venv/
+__pycache__/
+*.pyc
+auramind.db 
+# Add other files/folders you don't want in git

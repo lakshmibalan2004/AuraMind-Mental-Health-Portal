@@ -1,0 +1,487 @@
+/* static/css/dashboard.css */
+
+:root {
+    --sidebar-bg: #ffffff;
+    --main-bg: #f4f7f6; /* Or #f9fafb for a slightly different light grey */
+    --card-bg: #ffffff;
+    --primary-accent: #1abc9c; /* Your teal color */
+    --text-dark: #333;
+    --text-light: #555;
+    --text-muted: #888;
+    --border-color: #e5e7eb;
+    --sidebar-width: 260px;
+    --top-bar-height: 70px;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --card-radius: 8px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--main-bg);
+    color: var(--text-dark);
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed; /* Or 'sticky' if you prefer */
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    padding: 20px 0; /* Padding top/bottom, side padding handled by items */
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 20px 20px; /* Side padding for header content */
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.sidebar-logo {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+}
+
+.app-name {
+    font-size: 1.4em;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.sidebar-menu-icon {
+    margin-left: auto; /* Pushes icon to the right */
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2em;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px; /* Side padding for nav items */
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-left: 3px solid transparent; /* For active state indicator */
+}
+
+.sidebar-nav li a i {
+    margin-right: 15px;
+    width: 20px; /* Ensure icons align */
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.sidebar-nav li.active a,
+.sidebar-nav li a:hover {
+    background-color: #eafaf6; /* Light teal background */
+    color: var(--primary-accent);
+    border-left-color: var(--primary-accent);
+}
+.sidebar-nav li.active a {
+    font-weight: 600;
+}
+
+
+.nav-item-guest-notice {
+    padding: 10px 20px;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    background-color: #f8f9fa;
+    margin: 5px 15px;
+    border-radius: 4px;
+}
+
+
+.sidebar-footer {
+    margin-top: auto; /* Pushes to the bottom */
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 500;
+}
+.logout-link:hover {
+    color: var(--primary-accent);
+}
+.logout-link i {
+    margin-right: 10px;
+}
+
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    margin-left: var(--sidebar-width); /* Account for fixed sidebar */
+    padding: 0; /* Padding will be on inner sections */
+    background-color: var(--main-bg);
+}
+
+/* Top Bar */
+.top-bar {
+    height: var(--top-bar-height);
+    background-color: var(--sidebar-bg); /* Often same as sidebar or white */
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: sticky; /* Make top bar sticky */
+    top: 0;
+    z-index: 90;
+}
+
+.top-bar-left {
+    /* For future use */
+}
+
+.top-bar-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure these (or similar) styles are in a CSS file linked by dashboard_main.html */
+.profile-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background-color: #fff;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    z-index: 110;
+    padding: 8px 0;
+}
+
+.profile-dropdown.show {
+    display: block !important;
+}
+/* In your dashboard.css or style.css */
+
+/* ... your existing .profile-container, .profile-dropdown, .profile-dropdown.show styles ... */
+
+.profile-info-item {
+    padding: 8px 15px;
+    /* font-size: 0.9em;  <-- You already have this, adjust if needed */
+    color: var(--text-dark, #333);
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.profile-info-item.profile-name {
+    font-weight: 600;
+    font-size: 0.95em; /* Example: Slightly larger than email, but smaller than default */
+    /* Adjust this value as needed */
+}
+
+.profile-info-item.profile-email {
+    font-size: 0.8em;  /* Example: Make email smaller */
+    color: var(--text-light, #555);
+    /* Adjust this value as needed */
+}
+
+.profile-dropdown-divider {
+    height: 1px;
+    margin: 8px 0;
+    overflow: hidden;
+    background-color: var(--border-color, #e0e0e0);
+    border: 0;
+}
+
+.profile-dropdown-item { /* This styles the "Logout" link */
+    display: block;
+    padding: 8px 15px;
+    font-size: 0.9em;  /* Example: Adjust size for "Logout" */
+    color: var(--text-dark, #333); /* Your default text color */
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.profile-dropdown-item:hover {
+    background-color: #f5f5f5; /* Light grey hover */
+    color: var(--primary-accent, #1abc9c); /* Your primary accent color on hover */
+}
+
+/* ... other .profile-info-item, .profile-dropdown-divider, .profile-dropdown-item styles ... */
+.icon-button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.3em; /* Adjust icon size */
+    padding: 8px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+.icon-button:hover {
+    background-color: #f0f0f0;
+    color: var(--text-dark);
+}
+
+
+.profile-icon img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 15px;
+    border: 2px solid transparent;
+}
+.profile-icon:hover img {
+    border-color: var(--primary-accent);
+}
+.logout-link-desktop { /* Optional, if you want a dedicated desktop logout in top bar */
+    display: none; /* Hidden by default, show via media query if needed */
+}
+
+
+/* Page Section & Welcome Header */
+.page-section {
+    padding: 30px;
+}
+
+.welcome-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the start for multi-line text */
+    margin-bottom: 30px;
+}
+
+.welcome-header h1 {
+    font-size: 1.8em; /* Matches design better */
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: var(--text-dark);
+}
+
+.welcome-header p {
+    font-size: 1em;
+    color: var(--text-light);
+    margin: 0;
+}
+.more-options-btn {
+    color: var(--text-muted);
+}
+
+
+.guest-prompt {
+    background-color: #e0f2f7;
+    padding: 15px;
+    margin: 0 0 30px 0; /* Adjust margin if page-section has padding */
+    border-radius: var(--card-radius);
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.guest-prompt p {
+    margin:0;
+    color: #005f73;
+}
+.guest-prompt a {
+    color: var(--primary-accent);
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+/* Dashboard Grid & Cards */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 25px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h2 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-dark);
+}
+.more-options-btn-card {
+    font-size: 1em; /* Smaller for card headers */
+}
+
+.card-body {
+    flex-grow: 1; /* Allows body to fill space if card has fixed height */
+}
+
+/* Specific Card Styles */
+.chart-card {
+    /* May need specific height or aspect ratio for the chart */
+    grid-column: span 2; /* Makes chart card wider if possible */
+    min-height: 350px; /* Ensure chart has space */
+}
+.chart-card .card-body {
+    position: relative; /* For chart canvas responsiveness */
+}
+#moodChart {
+    max-height: 300px; /* Or adjust as needed */
+}
+
+
+.quick-actions-card .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-action {
+    display: flex; /* Align icon and text */
+    align-items: center;
+    justify-content: center; /* Center content */
+    background-color: var(--primary-accent);
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center; /* Ensure text is centered */
+}
+.btn-action:hover {
+    background-color: #16a085; /* Darker teal */
+}
+.btn-action i {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+
+.resource-spotlight-card .card-body img {
+    width: 100%;
+    height: auto; /* Or a fixed height e.g., 150px */
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+.resource-spotlight-card h4 {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+.resource-spotlight-card p {
+    font-size: 0.9em;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+.learn-more-link {
+    font-size: 0.9em;
+    color: var(--primary-accent);
+    text-decoration: none;
+    font-weight: 500;
+}
+.learn-more-link:hover {
+    text-decoration: underline;
+}
+.learn-more-link i {
+    font-size: 0.8em;
+    margin-left: 3px;
+}
+
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 992px) { /* Tablet and below */
+    .sidebar {
+        /* Example: transform: translateX(-100%); transition: transform 0.3s ease; */
+        /* You'd need JS to toggle a class for a hamburger menu */
+        /* For simplicity now, let's just make it take up less space or be hidden */
+        /* For now, we'll keep it, but content will wrap */
+    }
+    /* If sidebar were to be hidden and toggled by JS:
+    .main-content {
+        margin-left: 0;
+    }
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    */
+   .chart-card {
+        grid-column: span 1; /* Chart takes full width on smaller screens */
+    }
+}
+
+@media (max-width: 768px) { /* Mobile */
+    .sidebar {
+        width: 100%; /* Full width for mobile, or implement toggle */
+        height: auto;
+        position: relative; /* Not fixed */
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .top-bar {
+        padding: 0 15px;
+    }
+    .page-section {
+        padding: 20px;
+    }
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Single column */
+    }
+    .welcome-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .welcome-header .more-options-btn {
+        margin-top: 10px;
+    }
+}
